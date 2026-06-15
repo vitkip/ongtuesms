@@ -1,0 +1,11 @@
+<IfModule mod_rewrite.c>
+    RewriteEngine On
+
+    # 1. ປ້ອງກັນການເຂົ້າເຖິງໄຟລ໌ລະບົບ ແລະ ໄຟລ໌ສຳຄັນ
+    RedirectMatch 403 /\.(git|env|ini|sh|md)$
+    RedirectMatch 403 ^/composer\.(json|lock)$
+    RedirectMatch 403 ^/(app|bootstrap|config|database|resources|routes|storage|tests|vendor)
+
+    # 2. ສົ່ງຕໍ່ທຸກການຮຽກຮ້ອງ (Request) ໄປຫາໂຟນເດີ public
+    RewriteRule ^(.*)$ public/$1 [L]
+</IfModule>
