@@ -6,6 +6,7 @@
     RedirectMatch 403 ^/composer\.(json|lock)$
     RedirectMatch 403 ^/(app|bootstrap|config|database|resources|routes|storage|tests|vendor)
 
-    # 2. ສົ່ງຕໍ່ທຸກການຮຽກຮ້ອງ (Request) ໄປຫາໂຟນເດີ public
+    # 2. ສົ່ງຕໍ່ທຸກການຮຽກຮ້ອງ (Request) ໄປຫາໂຟນເດີ public (ປ້ອງກັນ Infinite Loop)
+    RewriteCond %{REQUEST_URI} !^/public/
     RewriteRule ^(.*)$ public/$1 [L]
 </IfModule>
