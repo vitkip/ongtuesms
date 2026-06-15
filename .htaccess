@@ -1,12 +1,11 @@
 <IfModule mod_rewrite.c>
     RewriteEngine On
 
-    # 1. ປ້ອງກັນການເຂົ້າເຖິງໄຟລ໌ລະບົບ ແລະ ໄຟລ໌ສຳຄັນ
-    RedirectMatch 403 /\.(git|env|ini|sh|md)$
-    RedirectMatch 403 ^/composer\.(json|lock)$
-    RedirectMatch 403 ^/(app|bootstrap|config|database|resources|routes|storage|tests|vendor)
+    # 1. ສົ່ງຕໍ່ໜ້າທຳອິດໄປຫາ public/index.php
+    RewriteRule ^$ public/index.php [L]
 
-    # 2. ສົ່ງຕໍ່ທຸກການຮຽກຮ້ອງ (Request) ໄປຫາໂຟນເດີ public (ປ້ອງກັນ Infinite Loop)
-    RewriteCond %{REQUEST_URI} !^/public/
+    # 2. ຖ້າບໍ່ແມ່ນໄຟລ໌ ຫຼື ໂຟນເດີທີ່ມີຢູ່ຈິງ ໃຫ້ສົ່ງໄປຫາ public/...
+    RewriteCond %{REQUEST_FILENAME} !-f
+    RewriteCond %{REQUEST_FILENAME} !-d
     RewriteRule ^(.*)$ public/$1 [L]
 </IfModule>
