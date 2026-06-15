@@ -1,0 +1,14 @@
+{
+    "noto sans lao": {
+        "normal": "\/Applications\/XAMPP\/xamppfiles\/htdocs\/Ongtuesms\/storage\/fonts\/noto_sans_lao_normal_5c6a82346781afa13798c97d7d66db81",
+        "bold": "noto_sans_lao_bold_49432d784aa8e2569b571a45e15af515"
+    },
+    "noto serif lao": {
+        "normal": "\/Applications\/XAMPP\/xamppfiles\/htdocs\/Ongtuesms\/storage\/fonts\/noto_serif_lao_normal_39cd2067d45e62b897beb93a7bf1b7f4",
+        "bold": "noto_serif_lao_bold_655153f4f9d4e48103352dcbc15011cb"
+    },
+    "phetsarath": {
+        "normal": "\/Applications\/XAMPP\/xamppfiles\/htdocs\/Ongtuesms\/storage\/fonts\/phetsarath_normal_afe99f9c32499b8cff9082c40d05258b",
+        "bold": "phetsarath_bold_ca4876974ecc5a1298ecf4a930142b40"
+    }
+}

@@ -1,0 +1,107 @@
+StartFontMetrics 4.1
+Notice Converted by PHP-font-lib
+Comment https://github.com/dompdf/php-font-lib
+EncodingScheme FontSpecific
+Copyright Copyright 2017 Google Inc. All Rights Reserved.
+FontName Noto Serif Lao
+FontSubfamily Bold
+UniqueID 2.000;GOOG;NotoSerifLao-Bold
+FullName Noto Serif Lao Bold
+Version Version 2.000; ttfautohint (v1.8) -l 8 -r 50 -G 200 -x 14 -D lao -f none -a qsq -X ""
+PostScriptName NotoSerifLao-Bold
+Trademark Noto is a trademark of Google Inc.
+Manufacturer Monotype Imaging Inc.
+Designer Monotype Design Team
+Description Designed by Monotype design team.
+FontVendorURL http://www.google.com/get/noto/
+FontDesignerURL http://www.monotype.com/studio
+LicenseDescription This Font Software is licensed under the SIL Open Font License, Version 1.1. This Font Software is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the SIL Open Font License for the specific language, permissions and limitations governing your use of this Font Software.
+LicenseURL http://scripts.sil.org/OFL
+Weight Bold
+ItalicAngle 0
+IsFixedPitch false
+UnderlineThickness 50
+UnderlinePosition -100
+FontHeightOffset 0
+Ascender 1174
+Descender -482
+FontBBox -698 -466 1041 1149
+StartCharMetrics 117
+U 0 ; WX 0 ; N NULL ; G 1
+U 13 ; WX 260 ; N CR ; G 2
+U 32 ; WX 260 ; N space ; G 3
+U 160 ; WX 260 ; N uni00A0 ; G 112
+U 3713 ; WX 685 ; N koKai-lao ; G 4
+U 3714 ; WX 606 ; N khoKhai-lao ; G 5
+U 3716 ; WX 614 ; N khoKhuay-lao ; G 6
+U 3719 ; WX 569 ; N ngoNgu-lao ; G 7
+U 3720 ; WX 582 ; N coCok-lao ; G 8
+U 3722 ; WX 608 ; N soSang-lao ; G 9
+U 3725 ; WX 619 ; N nyoNyung-lao ; G 10
+U 3732 ; WX 636 ; N doDek-lao ; G 11
+U 3733 ; WX 650 ; N toTa-lao ; G 12
+U 3734 ; WX 685 ; N thoThong-lao ; G 13
+U 3735 ; WX 786 ; N thoThung-lao ; G 14
+U 3737 ; WX 675 ; N noNok-lao ; G 15
+U 3738 ; WX 683 ; N boBae-lao ; G 16
+U 3739 ; WX 699 ; N poPa-lao ; G 17
+U 3740 ; WX 761 ; N phoPhueng-lao ; G 18
+U 3741 ; WX 740 ; N foFon-lao ; G 19
+U 3742 ; WX 822 ; N phoPhu-lao ; G 20
+U 3743 ; WX 832 ; N foFai-lao ; G 21
+U 3745 ; WX 668 ; N moMa-lao ; G 22
+U 3746 ; WX 655 ; N yoYa-lao ; G 23
+U 3747 ; WX 610 ; N roRot-lao ; G 24
+U 3749 ; WX 650 ; N loLing-lao ; G 25
+U 3751 ; WX 605 ; N woWi-lao ; G 26
+U 3754 ; WX 679 ; N soSeua-lao ; G 27
+U 3755 ; WX 854 ; N hoHaan-lao ; G 28
+U 3757 ; WX 626 ; N oO-lao ; G 29
+U 3758 ; WX 611 ; N hoHeuan-lao ; G 30
+U 3759 ; WX 593 ; N ellipsis-lao ; G 56
+U 3760 ; WX 513 ; N aVowel-lao ; G 33
+U 3761 ; WX 0 ; N maiKanVowel-lao ; G 58
+U 3762 ; WX 503 ; N aaVowel-lao ; G 34
+U 3763 ; WX 503 ; N amVowel-lao ; G 35
+U 3764 ; WX 0 ; N iVowel-lao ; G 59
+U 3765 ; WX 0 ; N iiVowel-lao ; G 60
+U 3766 ; WX 0 ; N euVowel-lao ; G 61
+U 3767 ; WX 0 ; N euuVowel-lao ; G 62
+U 3768 ; WX 0 ; N uVowel-lao ; G 64
+U 3769 ; WX 0 ; N uuVowel-lao ; G 65
+U 3771 ; WX 0 ; N maiKonVowel-lao ; G 63
+U 3772 ; WX 0 ; N loVowel-lao ; G 66
+U 3773 ; WX 557 ; N nyoVowel-lao ; G 36
+U 3776 ; WX 348 ; N eVowel-lao ; G 37
+U 3777 ; WX 656 ; N aeVowel-lao ; G 38
+U 3778 ; WX 452 ; N oVowel-lao ; G 39
+U 3779 ; WX 433 ; N ayMaiMuanVowel-lao ; G 40
+U 3780 ; WX 426 ; N aiMaiMayVowel-lao ; G 41
+U 3782 ; WX 635 ; N koLa-lao ; G 55
+U 3784 ; WX 0 ; N maiEk-lao ; G 67
+U 3785 ; WX 0 ; N maiTho-lao ; G 68
+U 3786 ; WX 0 ; N maiTi-lao ; G 69
+U 3787 ; WX 0 ; N maiCatawa-lao ; G 70
+U 3788 ; WX 0 ; N karan-lao ; G 71
+U 3789 ; WX 0 ; N niggahita-lao ; G 72
+U 3792 ; WX 584 ; N zero-lao ; G 45
+U 3793 ; WX 600 ; N one-lao ; G 46
+U 3794 ; WX 592 ; N two-lao ; G 47
+U 3795 ; WX 616 ; N three-lao ; G 48
+U 3796 ; WX 619 ; N four-lao ; G 49
+U 3797 ; WX 619 ; N five-lao ; G 50
+U 3798 ; WX 688 ; N six-lao ; G 51
+U 3799 ; WX 674 ; N seven-lao ; G 52
+U 3800 ; WX 621 ; N eight-lao ; G 53
+U 3801 ; WX 741 ; N nine-lao ; G 54
+U 3804 ; WX 1095 ; N hoNo-lao ; G 43
+U 3805 ; WX 1106 ; N hoMo-lao ; G 44
+U 3806 ; WX 739 ; N khmuGo-lao ; G 31
+U 3807 ; WX 696 ; N khmuNyo-lao ; G 32
+U 8203 ; WX 0 ; N uni200B ; G 113
+U 8204 ; WX 0 ; N uni200C ; G 114
+U 8205 ; WX 0 ; N uni200D ; G 115
+U 8365 ; WX 747 ; N kip ; G 57
+U 9676 ; WX 594 ; N dottedCircle ; G 116
+EndCharMetrics
+EndFontMetrics
