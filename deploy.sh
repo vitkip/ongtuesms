@@ -73,10 +73,11 @@ log "Running database migrations..."
 php artisan migrate --force
 
 # -------- Build cache ໃໝ່ --------
-log "Caching config, routes, views..."
+log "Caching config and routes..."
 php artisan config:cache
 php artisan route:cache
-php artisan view:cache
+# view:cache ບໍ່ລັນ — ຖ້າລັນໃນນາມ root ຈະສ້າງໄຟລ໌ owner root
+# ໃຫ້ web server compile views ເອງໃນ request ທຳອິດ
 
 # -------- Fix permissions ອີກຄັ້ງ ຫຼັງ artisan --------
 chmod -R 777 storage bootstrap/cache
