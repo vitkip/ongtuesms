@@ -51,6 +51,7 @@ mkdir -p storage/framework/views
 mkdir -p storage/framework/cache/data
 mkdir -p storage/framework/sessions
 mkdir -p storage/logs
+mkdir -p storage/fonts
 mkdir -p bootstrap/cache
 
 # -------- Permissions (before artisan commands) --------
