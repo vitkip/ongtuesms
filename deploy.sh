@@ -19,6 +19,8 @@ log()  { echo -e "${GREEN}[+]${NC} $1"; }
 warn() { echo -e "${YELLOW}[!]${NC} $1"; }
 fail() { echo -e "${RED}[x]${NC} $1"; exit 1; }
 
+log "${BOLD}=== Ongtue SMS Deployment ===${NC}"
+
 # -------- ດຶງ code ຈາກ git --------
 log "Pulling latest code from origin/main..."
 git fetch --all
@@ -35,15 +37,15 @@ fi
 log "Installing PHP dependencies (no-dev)..."
 composer install --no-dev --optimize-autoloader --no-interaction
 
+# -------- Discover packages (ຕ້ອງມາກ່ອນ cache) --------
+log "Discovering packages..."
+php artisan package:discover --ansi
+
 # -------- Key (ສ້າງຖ້າຍັງບໍ່ມີ) --------
 if grep -q "^APP_KEY=$" .env; then
     log "Generating application key..."
     php artisan key:generate --force
 fi
-
-# -------- Migrate --------
-log "Running database migrations..."
-php artisan migrate --force
 
 # -------- Storage directories --------
 log "Ensuring storage directories exist..."
@@ -54,7 +56,7 @@ mkdir -p storage/logs
 mkdir -p storage/fonts
 mkdir -p bootstrap/cache
 
-# -------- Permissions (before artisan commands) --------
+# -------- Permissions (ຕ້ອງ fix ກ່ອນ artisan commands) --------
 log "Setting permissions on storage and bootstrap/cache..."
 chmod -R 775 storage bootstrap/cache
 
@@ -62,11 +64,22 @@ chmod -R 775 storage bootstrap/cache
 log "Creating storage symlink..."
 php artisan storage:link 2>/dev/null || warn "storage:link already exists"
 
-# -------- Cache --------
+# -------- Clear stale cache ກ່ອນ rebuild --------
+log "Clearing stale cache..."
+php artisan optimize:clear
+
+# -------- Migrate --------
+log "Running database migrations..."
+php artisan migrate --force
+
+# -------- Build cache ໃໝ່ --------
 log "Caching config, routes, views..."
 php artisan config:cache
 php artisan route:cache
 php artisan view:cache
 
+# -------- Fix permissions ອີກຄັ້ງ ຫຼັງ artisan --------
+chmod -R 775 storage bootstrap/cache
+
 log ""
-log "${BOLD}Deployment complete!${NC}"
+log "${BOLD}Deployment complete! ✓${NC}"
