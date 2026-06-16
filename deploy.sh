@@ -58,7 +58,7 @@ mkdir -p bootstrap/cache
 
 # -------- Permissions (ຕ້ອງ fix ກ່ອນ artisan commands) --------
 log "Setting permissions on storage and bootstrap/cache..."
-chmod -R 775 storage bootstrap/cache
+chmod -R 777 storage bootstrap/cache
 
 # -------- Storage link --------
 log "Creating storage symlink..."
@@ -79,7 +79,7 @@ php artisan route:cache
 php artisan view:cache
 
 # -------- Fix permissions ອີກຄັ້ງ ຫຼັງ artisan --------
-chmod -R 775 storage bootstrap/cache
+chmod -R 777 storage bootstrap/cache
 
 log ""
 log "${BOLD}Deployment complete! ✓${NC}"
