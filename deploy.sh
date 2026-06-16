@@ -45,6 +45,18 @@ fi
 log "Running database migrations..."
 php artisan migrate --force
 
+# -------- Storage directories --------
+log "Ensuring storage directories exist..."
+mkdir -p storage/framework/views
+mkdir -p storage/framework/cache/data
+mkdir -p storage/framework/sessions
+mkdir -p storage/logs
+mkdir -p bootstrap/cache
+
+# -------- Permissions (before artisan commands) --------
+log "Setting permissions on storage and bootstrap/cache..."
+chmod -R 775 storage bootstrap/cache
+
 # -------- Storage link --------
 log "Creating storage symlink..."
 php artisan storage:link 2>/dev/null || warn "storage:link already exists"
@@ -54,10 +66,6 @@ log "Caching config, routes, views..."
 php artisan config:cache
 php artisan route:cache
 php artisan view:cache
-
-# -------- Permissions --------
-log "Setting permissions on storage and bootstrap/cache..."
-chmod -R 775 storage bootstrap/cache
 
 log ""
 log "${BOLD}Deployment complete!${NC}"
