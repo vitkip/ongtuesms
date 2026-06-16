@@ -10,6 +10,7 @@ use App\Livewire\GradesManagement;
 use App\Livewire\InvoiceManagement;
 use App\Livewire\SettingsManagement;
 use App\Livewire\UserManagement;
+use App\Livewire\UserProfile;
 
 // Guest Routes
 Route::middleware('guest')->group(function () {
@@ -29,6 +30,7 @@ Route::middleware('auth')->group(function () {
     Route::middleware('can:admin')->group(function () {
         Route::get('/students', StudentDirectory::class)->name('students');
         Route::get('/academic', AcademicManagement::class)->name('academic');
+        Route::get('/students/report/pdf', [ReportController::class, 'printStudentReport'])->name('students.report');
         Route::get('/students/{id}/transcript', [ReportController::class, 'printTranscript'])->name('students.transcript');
     });
 
@@ -49,6 +51,8 @@ Route::middleware('auth')->group(function () {
         Route::get('/settings', SettingsManagement::class)->name('settings');
         Route::get('/users', UserManagement::class)->name('users');
     });
+
+    Route::get('/profile', UserProfile::class)->name('profile');
 
     Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
 

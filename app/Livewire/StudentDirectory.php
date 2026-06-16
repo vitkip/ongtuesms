@@ -21,6 +21,7 @@ class StudentDirectory extends Component
     public $filterMajor = '';
     public $filterYear = '';
     public $filterGender = '';
+    public $filterYearLevel = '';
 
     // Modal state
     public $showModal = false;
@@ -89,6 +90,7 @@ class StudentDirectory extends Component
         $this->filterMajor = '';
         $this->filterYear = '';
         $this->filterGender = '';
+        $this->filterYearLevel = '';
         $this->resetPage();
     }
 
@@ -281,6 +283,16 @@ class StudentDirectory extends Component
         }
         if ($this->filterGender) {
             $query->where('gender', $this->filterGender);
+        }
+        if ($this->filterYearLevel) {
+            // Convert requested year_level to the expected enrollment start year
+            // year_level N in current cycle → enrolled in (currentStart - N + 1)
+            $now = now();
+            $currentStart = $now->month >= 6 ? $now->year : $now->year - 1;
+            $enrollStart  = $currentStart - (int)$this->filterYearLevel + 1;
+            $query->whereHas('academicYear', fn($q) =>
+                $q->where('year', 'LIKE', $enrollStart . '%')
+            );
         }
 
         $students = $query->orderBy('student_id', 'asc')->paginate(10);

@@ -5,6 +5,8 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\Invoice;
 use App\Models\Student;
+use App\Models\Major;
+use App\Models\AcademicYear;
 use App\Models\Grade;
 use App\Models\Setting;
 use Barryvdh\DomPDF\Facade\Pdf;
@@ -12,6 +14,88 @@ use Illuminate\Support\Facades\DB;
 
 class ReportController extends Controller
 {
+    public function printStudentReport(Request $request)
+    {
+        $majorId    = $request->query('major');
+        $yearId     = $request->query('year');
+        $gender     = $request->query('gender');
+        $yearLevel  = $request->query('year_level');
+
+        $query = Student::query()->with(['major', 'academicYear'])->orderBy('student_id', 'asc');
+
+        if ($majorId) $query->where('major_id', $majorId);
+        if ($yearId)  $query->where('academic_year_id', $yearId);
+        if ($gender)  $query->where('gender', $gender);
+        if ($yearLevel) {
+            // Convert year_level → enrollment start year (same logic as StudentDirectory filter)
+            $now = now();
+            $currentStart  = $now->month >= 6 ? $now->year : $now->year - 1;
+            $enrollStart   = $currentStart - (int) $yearLevel + 1;
+            $query->whereHas('academicYear', fn($q) =>
+                $q->where('year', 'LIKE', $enrollStart . '%')
+            );
+        }
+
+        $students = $query->get();
+
+        // Summary: by major (use computed year_level from accessor, academicYear already eager-loaded)
+        $byMajor = $students
+            ->groupBy(fn($s) => $s->major->name ?? 'ບໍ່ລະບຸ')
+            ->map(fn($group) => $group->count())
+            ->sortKeys();
+
+        // Summary: by year_level (accessor returns correct computed value)
+        $byYearLevel = $students
+            ->groupBy(fn($s) => $s->year_level)
+            ->map(fn($group) => $group->count())
+            ->sortKeys();
+
+        // Filter description for heading
+        $parts = [];
+        if ($majorId) {
+            $m = Major::find($majorId);
+            if ($m) $parts[] = 'ສາຂາ: ' . $m->name;
+        }
+        if ($yearId) {
+            $ay = AcademicYear::find($yearId);
+            if ($ay) $parts[] = 'ສົກຮຽນ: ' . $ay->year;
+        }
+        if ($gender)    $parts[] = 'ເພດ: ' . $gender;
+        if ($yearLevel) $parts[] = 'ປີຮຽນ: ປີ ' . $yearLevel;
+
+        $filterDescription = implode(' | ', $parts);
+
+        $reportTitle = $filterDescription
+            ? 'ລາຍງານຈຳນວນນັກສຶກສາ'
+            : 'ລາຍງານຈຳນວນນັກສຶກສາທັງໝົດ';
+
+        // Logo
+        $logoSetting = setting('school_logo');
+        $logoPath    = $logoSetting ? storage_path('app/public/' . $logoSetting) : public_path('logo.png');
+        $logoBase64  = null;
+        if (file_exists($logoPath)) {
+            $ext = pathinfo($logoPath, PATHINFO_EXTENSION);
+            $logoBase64 = 'data:image/' . $ext . ';base64,' . base64_encode(file_get_contents($logoPath));
+        }
+
+        $data = [
+            'students'          => $students,
+            'byMajor'           => $byMajor,
+            'byYearLevel'       => $byYearLevel,
+            'filterDescription' => $filterDescription,
+            'reportTitle'       => $reportTitle,
+            'logoBase64'        => $logoBase64,
+            'schoolName'        => setting('school_name', 'ວິທະຍາໄລຄູສົງ ອົງຕື້'),
+            'printDate'         => $this->formatLaoDate(now()),
+        ];
+
+        $pdf = Pdf::loadView('pdf.student_report', $data)
+                  ->setPaper('A4', 'portrait');
+
+        $filename = 'students_report_' . date('Y-m-d_H-i-s') . '.pdf';
+        return $pdf->stream($filename);
+    }
+
     public function printInvoiceReport(Request $request)
     {
         $search = $request->query('search');

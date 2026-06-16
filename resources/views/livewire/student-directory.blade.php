@@ -101,7 +101,7 @@
 
         <!-- Major Filter -->
         <div class="w-56 min-w-[180px]">
-            <label class="block text-[10px] font-bold text-primary/60 uppercase tracking-widest mb-1.5">ສາຂາວિຊາ (Major)</label>
+            <label class="block text-[10px] font-bold text-primary/60 uppercase tracking-widest mb-1.5">ສາຂາວິຊາ (Major)</label>
             <select wire:model.live="filterMajor" 
                     class="w-full bg-background border border-outline-variant rounded-xl px-4 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent transition-all">
                 <option value="">ທັງໝົດ</option>
@@ -137,12 +137,39 @@
             </select>
         </div>
 
+        <!-- Year Level Filter -->
+        <div class="w-36 min-w-[120px]">
+            <label class="block text-[10px] font-bold text-primary/60 uppercase tracking-widest mb-1.5">ປີຮຽນ</label>
+            <select wire:model.live="filterYearLevel"
+                    class="w-full bg-background border border-outline-variant rounded-xl px-4 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent transition-all">
+                <option value="">ທັງໝົດ</option>
+                <option value="1">ປີ 1</option>
+                <option value="2">ປີ 2</option>
+                <option value="3">ປີ 3</option>
+                <option value="4">ປີ 4</option>
+            </select>
+        </div>
+
         <!-- Reset Button -->
-        <button wire:click="resetFilters" 
-                class="bg-surface-container-high hover:bg-surface-container-highest text-primary p-2.5 rounded-xl border border-outline-variant transition-all flex items-center justify-center shrink-0 active:scale-[0.95]" 
+        <button wire:click="resetFilters"
+                class="bg-surface-container-high hover:bg-surface-container-highest text-primary p-2.5 rounded-xl border border-outline-variant transition-all flex items-center justify-center shrink-0 active:scale-[0.95]"
                 title="ລ້າງການກອງຂໍ້ມູນ">
             <span class="material-symbols-outlined text-[20px]">refresh</span>
         </button>
+
+        <!-- Print Report Button -->
+        <a href="{{ route('students.report', array_filter([
+                'major'      => $filterMajor,
+                'year'       => $filterYear,
+                'gender'     => $filterGender,
+                'year_level' => $filterYearLevel,
+           ])) }}"
+           target="_blank"
+           class="inline-flex items-center gap-2 px-4 py-2.5 bg-primary text-on-primary text-sm font-bold rounded-xl hover:bg-primary/90 transition-all shrink-0 shadow-sm active:scale-[0.97]"
+           title="ດາວໂຫຼດລາຍງານ PDF">
+            <span class="material-symbols-outlined text-[20px]">picture_as_pdf</span>
+            <span class="hidden sm:inline">ລາຍງານ PDF</span>
+        </a>
     </div>
 
     <!-- Data Table -->
@@ -154,7 +181,7 @@
                         <th class="px-6 py-4 w-40">ລະຫັດນັກສຶກສາ</th>
                         <th class="px-6 py-4">ຊື່ ແລະ ນາມສະກຸນ</th>
                         <th class="px-6 py-4 w-28 text-center">ເພດ</th>
-                        <th class="px-6 py-4 w-60">ສາຂາວિຊາ</th>
+                        <th class="px-6 py-4 w-60">ສາຂາວິຊາ</th>
                         <th class="px-6 py-4 w-32 text-center">ສົກຮຽນ</th>
                         <th class="px-6 py-4 w-48 text-center">ທີ່ຢູ່ປັດຈຸບັນ</th>
                         <th class="px-6 py-4 text-right w-36">ຈັດການ</th>

@@ -131,6 +131,12 @@
                 </a>
                 @endcan
 
+                <a class="text-on-primary/70 hover:text-on-primary px-4 py-2 flex items-center gap-3 text-sm transition-colors rounded-lg hover:bg-primary-container/20 {{ Route::is('profile') ? 'bg-primary-container text-on-primary border-l-4 border-secondary-container' : '' }}"
+                   href="{{ route('profile') }}" onclick="closeSidebar()">
+                    <span class="material-symbols-outlined">account_circle</span>
+                    <span>ໂປຣໄຟລ໌ຂ້ອຍ</span>
+                </a>
+
                 <form action="{{ route('logout') }}" method="POST" id="logout-form" class="hidden">
                     @csrf
                 </form>
@@ -181,15 +187,17 @@
                     <span class="material-symbols-outlined text-primary" style="font-size: 22px;">help</span>
                 </button>
                 <div class="h-8 w-[1px] bg-outline-variant mx-1 hidden sm:block"></div>
-                <div class="flex items-center gap-2 cursor-pointer hover:opacity-80 transition-opacity">
-                    <img class="w-8 h-8 rounded-full border border-primary/20 flex-shrink-0"
-                         alt="Administrator avatar"
-                         src="https://lh3.googleusercontent.com/aida-public/AB6AXuDXyaKr5rrVwjXrflWpvZsNrPg_VzoRGYHuCwV3YrER_9VbGKsMk5qvEkXLDByOwPCkLvWB5NUkEUHtHKr5WWoEa7TPouYSAk5d8iGuSCLOSw4-wK2CR9G-fFdkFg4VBp-KoirbCwPv_EPaPfRWJ15Tu5bhwb0Zlf7ttwmdWdAMzrE3u9NrzAc58qMFH86kXZvsYRA4GysFs6n63U0lFr1LjFMkwEUzXlB6cRT4B2spLaZN4GO3EWMtvSZHOyFBAV4UZBy7kKqcSvo"/>
+                <a href="{{ route('profile') }}" class="flex items-center gap-2 hover:opacity-80 transition-opacity" title="ໂປຣໄຟລ໌ຂ້ອຍ">
+                    <div class="w-8 h-8 rounded-full bg-primary border border-primary/20 flex-shrink-0 flex items-center justify-center">
+                        <span class="text-on-primary text-sm font-bold leading-none">
+                            {{ mb_strtoupper(mb_substr(Auth::user()->full_name ?? Auth::user()->username, 0, 1)) }}
+                        </span>
+                    </div>
                     <div class="hidden xl:block">
                         <p class="text-xs font-bold leading-none">{{ Auth::user()->full_name ?? 'ຜູ້ບໍລິຫານ' }}</p>
                         <p class="text-[10px] text-outline leading-none mt-1 font-semibold uppercase">{{ Auth::user()->role === 'admin' ? 'ຜູ້ດູແລລະບົບ' : (Auth::user()->role === 'finance' ? 'ພະນັກງານການເງິນ' : 'ອາຈານສອນ') }}</p>
                     </div>
-                </div>
+                </a>
             </div>
         </div>
     </header>
