@@ -32,6 +32,7 @@ Route::middleware('auth')->group(function () {
         Route::get('/academic', AcademicManagement::class)->name('academic');
         Route::get('/students/report/pdf', [ReportController::class, 'printStudentReport'])->name('students.report');
         Route::get('/students/{id}/transcript', [ReportController::class, 'printTranscript'])->name('students.transcript');
+        Route::get('/students/{id}/card', [ReportController::class, 'printStudentCard'])->name('students.card');
     });
 
     // Admin + teacher routes

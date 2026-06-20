@@ -349,19 +349,19 @@
     @endif
 
     <!-- ⑤ Summary -->
-    <div class="summary-total">ຈຳນວນນັກສຶກສາທັງໝົດ: {{ $students->count() }} ຄົນ</div>
+    <div class="summary-total">ຈຳນວນນັກສຶກສາທັງໝົດ: {{ $students->count() }} ອົງ</div>
     <table class="summary-table">
         <tr>
             <td class="summary-cell">
                 <div class="summary-head">ຈຳນວນນັກສຶກສາແຍກຕາມສາຂາວິຊາ:</div>
                 @foreach($byMajor as $majorName => $count)
-                    <div class="summary-row">• {{ $majorName }}: {{ $count }} ຄົນ</div>
+                    <div class="summary-row">• {{ $majorName }}: {{ $count }} ອົງ</div>
                 @endforeach
             </td>
             <td class="summary-cell">
                 <div class="summary-head">ຈຳນວນນັກສຶກສາແຍກຕາມປີຮຽນ:</div>
                 @foreach($byYearLevel as $yl => $cnt)
-                    <div class="summary-row">• ປີ {{ $yl }}: {{ $cnt }} ຄົນ</div>
+                    <div class="summary-row">• ປີ {{ $yl }}: {{ $cnt }} ອົງ</div>
                 @endforeach
             </td>
         </tr>

@@ -314,6 +314,74 @@ class ReportController extends Controller
         return $pdf->stream('Transcript-' . ($student->student_id ?: $student->id) . '.pdf');
     }
 
+    public function printStudentCard($id)
+    {
+        $student = Student::with(['major', 'academicYear'])->findOrFail($id);
+
+        // Logo
+        $logoSetting = setting('school_logo');
+        $logoPath    = $logoSetting ? storage_path('app/public/' . $logoSetting) : public_path('logo.png');
+        $logoBase64  = null;
+        if (file_exists($logoPath)) {
+            $ext = pathinfo($logoPath, PATHINFO_EXTENSION);
+            $logoBase64 = 'data:image/' . $ext . ';base64,' . base64_encode(file_get_contents($logoPath));
+        }
+
+        // Student photo
+        $photoBase64 = null;
+        if ($student->photo) {
+            $photoPath = storage_path('app/public/students/' . $student->photo);
+            if (file_exists($photoPath)) {
+                $ext = pathinfo($photoPath, PATHINFO_EXTENSION);
+                $photoBase64 = 'data:image/' . $ext . ';base64,' . base64_encode(file_get_contents($photoPath));
+            }
+        }
+
+        // QR Code (PNG via GD)
+        $qrBase64 = null;
+        try {
+            $qrContent = $student->student_id ?: (string) $student->id;
+            $qrPng = \SimpleSoftwareIO\QrCode\Facades\QrCode::format('png')
+                ->size(200)->margin(1)->generate($qrContent);
+            $qrBase64 = 'data:image/png;base64,' . base64_encode($qrPng);
+        } catch (\Exception $e) {
+            // QR fails silently — card still prints without it
+        }
+
+        // Date of birth in Lao (without "ວັນທີ" prefix)
+        $dobFormatted = null;
+        if ($student->dob) {
+            $laoMonths = [
+                1 => 'ມັງກອນ', 2 => 'ກຸມພາ',  3 => 'ມີນາ',
+                4 => 'ເມສາ',   5 => 'ພຶດສະພາ', 6 => 'ມິຖຸນາ',
+                7 => 'ກໍລະກົດ', 8 => 'ສິງຫາ',  9 => 'ກັນຍາ',
+                10 => 'ຕຸລາ',  11 => 'ພະຈິກ',  12 => 'ທັນວາ',
+            ];
+            $dobFormatted = $student->dob->day . ' ' . ($laoMonths[$student->dob->month] ?? '') . ' ' . $student->dob->year;
+        }
+
+        $data = [
+            'student'       => $student,
+            'logoBase64'    => $logoBase64,
+            'photoBase64'   => $photoBase64,
+            'qrBase64'      => $qrBase64,
+            'dobFormatted'  => $dobFormatted,
+            'schoolName'    => setting('school_name', 'ວິທະຍາໄລຄູສົງ ອົງຕື້'),
+            'schoolPhone'   => setting('school_phone', '+856-20-9121-3388'),
+            'schoolWebsite' => 'www.ongtue-ttc.edu.la',
+            'principalName' => 'ພຣະອາຈານ ປອ ບຸນຈັນ ຈັນທະສິດ',
+            'issueDate'     => now()->format('d/m/Y'),
+            'expiryDate'    => now()->addYears(4)->format('d/m/Y'),
+        ];
+
+        $pdf = Pdf::loadView('pdf.student_card', $data)->setPaper('A4', 'portrait');
+
+        $filename = 'student_card_' . ($student->student_id ?: $student->id)
+            . '___both_' . now()->format('Ymd_His') . '.pdf';
+
+        return $pdf->stream($filename);
+    }
+
     /**
      * Convert GPA to letter grade
      */

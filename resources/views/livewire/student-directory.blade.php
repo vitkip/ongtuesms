@@ -1,4 +1,4 @@
-<div>
+<div x-data="{ viewMode: localStorage.getItem('studentViewMode') || 'table' }" x-init="$watch('viewMode', v => localStorage.setItem('studentViewMode', v))">
     <!-- Header Banner -->
     <div class="relative overflow-hidden rounded-2xl text-on-primary p-8 mb-6 shadow-lg"
          style="background: linear-gradient(135deg, #00327d 0%, #0047ab 55%, #002f6c 100%);">
@@ -150,6 +150,22 @@
             </select>
         </div>
 
+        <!-- View Toggle -->
+        <div class="flex gap-1 bg-surface-container rounded-xl p-1 border border-outline-variant shrink-0">
+            <button @click="viewMode = 'table'"
+                    :class="viewMode === 'table' ? 'bg-surface-container-lowest shadow text-primary' : 'text-outline hover:text-on-surface'"
+                    class="p-2 rounded-lg transition-all"
+                    title="ມຸມມອງຕາຕະລາງ">
+                <span class="material-symbols-outlined text-[20px]">table_rows</span>
+            </button>
+            <button @click="viewMode = 'grid'"
+                    :class="viewMode === 'grid' ? 'bg-surface-container-lowest shadow text-primary' : 'text-outline hover:text-on-surface'"
+                    class="p-2 rounded-lg transition-all"
+                    title="ມຸມມອງກາດ">
+                <span class="material-symbols-outlined text-[20px]">grid_view</span>
+            </button>
+        </div>
+
         <!-- Reset Button -->
         <button wire:click="resetFilters"
                 class="bg-surface-container-high hover:bg-surface-container-highest text-primary p-2.5 rounded-xl border border-outline-variant transition-all flex items-center justify-center shrink-0 active:scale-[0.95]"
@@ -172,8 +188,121 @@
         </a>
     </div>
 
+    <!-- Card Grid View -->
+    <div x-show="viewMode === 'grid'" x-transition.opacity class="mb-6">
+        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
+            @forelse($students as $student)
+                <div class="bg-surface-container-lowest rounded-2xl border border-outline-variant shadow-sm hover:shadow-md hover:-translate-y-0.5 transition-all duration-200 overflow-hidden flex flex-col">
+                    <!-- Amber-to-navy top accent -->
+                    <div class="h-1 bg-gradient-to-r from-secondary-container via-secondary-container/70 to-primary/40"></div>
+
+                    <!-- ID + Gender row -->
+                    <div class="flex justify-between items-center px-4 pt-3">
+                        <span class="font-mono text-[10px] font-bold text-primary bg-primary/[0.07] px-2 py-0.5 rounded-md border border-primary/15 tracking-wide">
+                            {{ $student->student_id ?? '—' }}
+                        </span>
+                        @if(in_array($student->gender, ['ພຣະ', 'ສ.ນ']))
+                            <span class="inline-flex items-center px-2 py-0.5 bg-secondary/10 text-secondary text-[10px] font-bold rounded-full border border-secondary/25">{{ $student->gender }}</span>
+                        @else
+                            <span class="inline-flex items-center px-2 py-0.5 bg-primary/10 text-primary text-[10px] font-bold rounded-full border border-primary/15">{{ $student->gender }}</span>
+                        @endif
+                    </div>
+
+                    <!-- Photo -->
+                    <div class="flex justify-center pt-4 pb-3">
+                        <div class="w-20 h-20 rounded-full overflow-hidden border-2 border-outline-variant shadow-md bg-surface-container flex items-center justify-center">
+                            @if($student->photo)
+                                <img class="w-full h-full object-cover"
+                                     src="{{ Storage::url('students/' . $student->photo) }}"
+                                     alt="{{ $student->full_name }}"/>
+                            @else
+                                <svg class="w-9 h-9 text-primary/20" viewBox="0 0 100 100" fill="none" stroke="currentColor" stroke-width="5">
+                                    <circle cx="50" cy="50" r="40" stroke-width="5"/>
+                                    <circle cx="50" cy="50" r="10" stroke-width="3"/>
+                                    <path d="M50 10 L50 90 M10 50 L90 50 M21.7 21.7 L78.3 78.3 M21.7 78.3 L78.3 21.7" stroke-width="3"/>
+                                    <circle cx="50" cy="50" r="3" fill="currentColor"/>
+                                </svg>
+                            @endif
+                        </div>
+                    </div>
+
+                    <!-- Name & Info -->
+                    <div class="px-4 pb-3 text-center flex-1 flex flex-col">
+                        <h3 class="font-bold text-on-surface text-sm leading-tight">{{ $student->gendered_name }}</h3>
+                        <p class="text-[10px] text-outline mt-0.5 mb-3 truncate">{{ $student->email ?? 'ບໍ່ມີອີເມລ' }}</p>
+
+                        <div class="mt-auto space-y-1.5">
+                            <div class="flex items-center gap-1.5 bg-surface-container rounded-lg px-3 py-1.5">
+                                <span class="material-symbols-outlined text-primary/50 text-[14px]" style="font-variation-settings: 'FILL' 1;">school</span>
+                                <span class="text-[11px] text-on-surface/80 font-semibold truncate">{{ $student->major->name ?? 'N/A' }}</span>
+                            </div>
+                            <div class="flex items-center gap-1.5 bg-surface-container rounded-lg px-3 py-1.5">
+                                <span class="material-symbols-outlined text-primary/50 text-[14px]" style="font-variation-settings: 'FILL' 1;">calendar_month</span>
+                                <span class="text-[11px] text-outline font-semibold">{{ $student->academicYear->year ?? '—' }}</span>
+                                @if($student->village || $student->district)
+                                    <span class="text-outline/40 text-[11px] mx-0.5">•</span>
+                                    <span class="text-[11px] text-outline truncate">{{ implode(', ', array_filter([$student->village, $student->district])) }}</span>
+                                @endif
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Action Footer -->
+                    <div class="border-t border-outline-variant/60 px-3 py-2 flex items-center gap-0.5">
+                        <a href="{{ route('students.card', $student->id) }}" target="_blank"
+                           class="flex-1 py-1.5 flex items-center justify-center gap-1 text-outline hover:text-secondary hover:bg-surface-container rounded-lg transition-colors"
+                           title="ພິມບັດນັກສຶກສາ">
+                            <span class="material-symbols-outlined text-[16px]">badge</span>
+                            <span class="text-[10px] font-semibold hidden sm:block">ບັດ</span>
+                        </a>
+                        <div class="w-px h-4 bg-outline-variant/70 mx-0.5"></div>
+                        <a href="{{ route('students.transcript', $student->id) }}" target="_blank"
+                           class="flex-1 py-1.5 flex items-center justify-center gap-1 text-outline hover:text-secondary hover:bg-surface-container rounded-lg transition-colors"
+                           title="Transcript">
+                            <span class="material-symbols-outlined text-[16px]">description</span>
+                            <span class="text-[10px] font-semibold hidden sm:block">ໃບຄະແນນ</span>
+                        </a>
+                        <div class="w-px h-4 bg-outline-variant/70 mx-0.5"></div>
+                        <button wire:click="openEditModal({{ $student->id }})"
+                                class="flex-1 py-1.5 flex items-center justify-center gap-1 text-outline hover:text-primary hover:bg-surface-container rounded-lg transition-colors"
+                                title="ແກ້ໄຂ">
+                            <span class="material-symbols-outlined text-[16px]">edit</span>
+                            <span class="text-[10px] font-semibold hidden sm:block">ແກ້ໄຂ</span>
+                        </button>
+                        <div class="w-px h-4 bg-outline-variant/70 mx-0.5"></div>
+                        <button wire:click="delete({{ $student->id }})"
+                                wire:confirm="ທ່ານແນ່ໃຈບໍ່ວ່າຕ້ອງການລຶບຂໍ້ມູນນັກສຶກສາຄົນນີ້?"
+                                class="flex-1 py-1.5 flex items-center justify-center gap-1 text-outline hover:text-error hover:bg-error-container/20 rounded-lg transition-colors"
+                                title="ລຶບ">
+                            <span class="material-symbols-outlined text-[16px]">delete</span>
+                            <span class="text-[10px] font-semibold hidden sm:block">ລຶບ</span>
+                        </button>
+                    </div>
+                </div>
+            @empty
+                <div class="col-span-full py-16 flex flex-col items-center gap-4">
+                    <svg class="w-14 h-14 text-outline/20" viewBox="0 0 100 100" fill="none" stroke="currentColor" stroke-width="3.5">
+                        <circle cx="50" cy="50" r="40" stroke-width="4"/>
+                        <circle cx="50" cy="50" r="10" stroke-width="2.5"/>
+                        <path d="M50 10 L50 90 M10 50 L90 50 M21.7 21.7 L78.3 78.3 M21.7 78.3 L78.3 21.7" stroke-width="2.5"/>
+                        <circle cx="50" cy="50" r="3" fill="currentColor"/>
+                    </svg>
+                    <div class="text-center">
+                        <p class="text-sm font-bold text-outline">ບໍ່ມີຂໍ້ມູນນັກສຶກສາ</p>
+                        <p class="text-xs text-outline/60 mt-1">ລອງປ່ຽນເງື່ອນໄຂການຄົ້ນຫາ</p>
+                    </div>
+                </div>
+            @endforelse
+        </div>
+
+        <!-- Pagination (grid view) -->
+        <div class="mt-4 px-6 py-3 bg-surface-container-lowest rounded-2xl border border-outline-variant">
+            {{ $students->links() }}
+        </div>
+    </div>
+
     <!-- Data Table -->
-    <div class="bg-surface-container-lowest rounded-2xl border border-outline-variant overflow-hidden shadow-sm">
+    <div x-show="viewMode === 'table'" x-transition.opacity class="bg-surface-container-lowest rounded-2xl border border-outline-variant overflow-hidden shadow-sm">
         <div class="overflow-x-auto">
             <table class="w-full text-left border-collapse">
                 <thead>
@@ -248,18 +377,24 @@
                             <!-- Action buttons -->
                             <td class="px-6 py-4">
                                 <div class="flex items-center justify-end gap-1">
-                                    <a href="{{ route('students.transcript', $student->id) }}" 
+                                    <a href="{{ route('students.card', $student->id) }}"
+                                       target="_blank"
+                                       class="p-2 text-outline hover:text-secondary hover:bg-surface-container rounded-lg transition-colors flex items-center justify-center"
+                                       title="ພິມບັດນັກສຶກສາ">
+                                        <span class="material-symbols-outlined text-[18px]">badge</span>
+                                    </a>
+                                    <a href="{{ route('students.transcript', $student->id) }}"
                                        target="_blank"
                                        class="p-2 text-outline hover:text-secondary hover:bg-surface-container rounded-lg transition-colors flex items-center justify-center"
                                        title="ໃບສະຫຼຸບຄະແນນ (Transcript)">
                                         <span class="material-symbols-outlined text-[18px]">description</span>
                                     </a>
-                                    <button wire:click="openEditModal({{ $student->id }})" 
+                                    <button wire:click="openEditModal({{ $student->id }})"
                                             class="p-2 text-outline hover:text-primary hover:bg-surface-container rounded-lg transition-colors"
                                             title="ແກ້ໄຂ">
                                         <span class="material-symbols-outlined text-[18px]">edit</span>
                                     </button>
-                                    <button wire:click="delete({{ $student->id }})" 
+                                    <button wire:click="delete({{ $student->id }})"
                                             wire:confirm="ທ່ານແນ່ໃຈບໍ່ວ່າຕ້ອງການລຶບຂໍ້ມູນນັກສຶກສາຄົນນີ້?"
                                             class="p-2 text-outline hover:text-error hover:bg-surface-container rounded-lg transition-colors"
                                             title="ລຶບ">
