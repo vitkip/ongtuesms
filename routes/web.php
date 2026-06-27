@@ -4,6 +4,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\ReportController;
+use App\Http\Controllers\StudentPortalController;
 use App\Livewire\StudentDirectory;
 use App\Livewire\AcademicManagement;
 use App\Livewire\GradesManagement;
@@ -11,6 +12,16 @@ use App\Livewire\InvoiceManagement;
 use App\Livewire\SettingsManagement;
 use App\Livewire\UserManagement;
 use App\Livewire\UserProfile;
+
+// ── Student Portal ────────────────────────────────────────────────────────
+// Public QR scan entry point — no auth required, token authenticates the student
+Route::get('/s/{token}', [StudentPortalController::class, 'loginViaQr'])->name('student.qr-login');
+
+// Student-authenticated routes (uses 'student' guard)
+Route::middleware('auth:student')->group(function () {
+    Route::get('/student/dashboard', [StudentPortalController::class, 'dashboard'])->name('student.dashboard');
+    Route::post('/student/logout', [StudentPortalController::class, 'logout'])->name('student.logout');
+});
 
 // Guest Routes
 Route::middleware('guest')->group(function () {

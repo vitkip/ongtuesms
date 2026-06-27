@@ -337,13 +337,46 @@ class ReportController extends Controller
             }
         }
 
-        // QR Code (PNG via GD)
+        // QR Code — render via BaconQrCode matrix + GD (no imagick needed)
         $qrBase64 = null;
         try {
-            $qrContent = $student->student_id ?: (string) $student->id;
-            $qrPng = \SimpleSoftwareIO\QrCode\Facades\QrCode::format('png')
-                ->size(200)->margin(1)->generate($qrContent);
-            $qrBase64 = 'data:image/png;base64,' . base64_encode($qrPng);
+            // Encode the auto-login URL so scanning the card logs the student in directly
+            $qrContent = $student->qr_token
+                ? url('/s/' . $student->qr_token)
+                : ($student->student_id ?: (string) $student->id);
+            $qrCode   = \BaconQrCode\Encoder\Encoder::encode(
+                $qrContent,
+                \BaconQrCode\Common\ErrorCorrectionLevel::M()
+            );
+            $matrix = $qrCode->getMatrix();
+            $dim    = $matrix->getWidth();
+            $scale  = 8;
+            $size   = ($dim + 2) * $scale;
+
+            $img   = imagecreatetruecolor($size, $size);
+            $white = imagecolorallocate($img, 255, 255, 255);
+            $black = imagecolorallocate($img, 0, 0, 0);
+            imagefill($img, 0, 0, $white);
+
+            for ($row = 0; $row < $dim; $row++) {
+                for ($col = 0; $col < $dim; $col++) {
+                    if ($matrix->get($col, $row) === 1) {
+                        imagefilledrectangle(
+                            $img,
+                            ($col + 1) * $scale, ($row + 1) * $scale,
+                            ($col + 2) * $scale - 1, ($row + 2) * $scale - 1,
+                            $black
+                        );
+                    }
+                }
+            }
+
+            ob_start();
+            imagepng($img);
+            $pngData = ob_get_clean();
+            imagedestroy($img);
+
+            $qrBase64 = 'data:image/png;base64,' . base64_encode($pngData);
         } catch (\Exception $e) {
             // QR fails silently — card still prints without it
         }
@@ -360,18 +393,26 @@ class ReportController extends Controller
             $dobFormatted = $student->dob->day . ' ' . ($laoMonths[$student->dob->month] ?? '') . ' ' . $student->dob->year;
         }
 
+        // Signature / stamp image
+        $signatureBase64 = null;
+        $sigPath = resource_path('assets/images/Signature.png');
+        if (file_exists($sigPath)) {
+            $signatureBase64 = 'data:image/png;base64,' . base64_encode(file_get_contents($sigPath));
+        }
+
         $data = [
-            'student'       => $student,
-            'logoBase64'    => $logoBase64,
-            'photoBase64'   => $photoBase64,
-            'qrBase64'      => $qrBase64,
-            'dobFormatted'  => $dobFormatted,
-            'schoolName'    => setting('school_name', 'ວິທະຍາໄລຄູສົງ ອົງຕື້'),
-            'schoolPhone'   => setting('school_phone', '+856-20-9121-3388'),
-            'schoolWebsite' => 'www.ongtue-ttc.edu.la',
-            'principalName' => 'ພຣະອາຈານ ປອ ບຸນຈັນ ຈັນທະສິດ',
-            'issueDate'     => now()->format('d/m/Y'),
-            'expiryDate'    => now()->addYears(4)->format('d/m/Y'),
+            'student'          => $student,
+            'logoBase64'       => $logoBase64,
+            'photoBase64'      => $photoBase64,
+            'qrBase64'         => $qrBase64,
+            'signatureBase64'  => $signatureBase64,
+            'dobFormatted'     => $dobFormatted,
+            'schoolName'       => setting('school_name', 'ວິທະຍາໄລຄູສົງ ອົງຕື້'),
+            'schoolPhone'      => setting('school_phone', '+856-20-9121-3388'),
+            'schoolWebsite'    => 'www.ongtue-ttc.edu.la',
+            'principalName'    => 'ພຣະອາຈານ ປອ ບຸນຈັນ ຈັນທະສິດ',
+            'issueDate'        => now()->format('d/m/Y'),
+            'expiryDate'       => now()->addYears(4)->format('d/m/Y'),
         ];
 
         $pdf = Pdf::loadView('pdf.student_card', $data)->setPaper('A4', 'portrait');

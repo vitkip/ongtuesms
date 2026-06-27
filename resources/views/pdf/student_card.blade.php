@@ -32,754 +32,739 @@
 
         body {
             font-family: 'Phetsarath', sans-serif;
-            color: #1F3A5F;
+            width: 210mm;
+            background: #ffffffff;
         }
 
-        .page-break {
+        /* ──────────────────────────────────────
+           A4 PAGE WRAPPER
+        ────────────────────────────────────── */
+        .page {
+            width: 210mm;
+            height: 297mm;
+            background: #ffffffff;
+            position: relative;
+        }
+
+        /* Page break only after page 1 */
+        .page-front {
             page-break-after: always;
         }
 
-        /* ════════════════════════════════════════════════════
-           PALETTE
-           gold        #BF932E   gold-dark  #9C7620
-           gold-tint   #F0E7CC   paper      #FBF8F1
-           navy        #1F3A5F   slate      #5B6472
-           hairline    #E5DCC4
-        ════════════════════════════════════════════════════ */
+        /* ──────────────────────────────────────
+           CR80 CARD  86 × 54 mm
+           Centred on A4 — symmetric for both
+           long-edge & short-edge duplex flip
+           left  = (210 - 86) / 2 = 62 mm
+           top   = (297 - 54) / 2 = 121.5 mm
+        ────────────────────────────────────── */
+        .card {
+            position: absolute;
+            top: 121.5mm;
+            left: 62mm;
+            width: 86mm;
+            height: 54mm;
+            border: 0.7pt solid #1e2d7d;
+            border-radius: 2.5mm;
+            background: #ffffff;
+            overflow: hidden;
+        }
+
+        /* ── Crop / cut marks (same on both pages) ── */
+        /* Each mark: 5 mm long, 1 mm gap from card edge */
+        .cm {
+            position: absolute;
+            background: #666666;
+        }
+
+        /* top-left */
+        .cm-tl-h {
+            top: 121.5mm;
+            left: 55.5mm;
+            width: 5mm;
+            height: 1pt;
+        }
+
+        .cm-tl-v {
+            top: 115mm;
+            left: 62mm;
+            width: 1pt;
+            height: 5mm;
+        }
+
+        /* top-right */
+        .cm-tr-h {
+            top: 121.5mm;
+            left: 149.5mm;
+            width: 5mm;
+            height: 1pt;
+        }
+
+        .cm-tr-v {
+            top: 115mm;
+            left: 148mm;
+            width: 1pt;
+            height: 5mm;
+        }
+
+        /* bottom-left */
+        .cm-bl-h {
+            top: 175.5mm;
+            left: 55.5mm;
+            width: 5mm;
+            height: 1pt;
+        }
+
+        .cm-bl-v {
+            top: 176.5mm;
+            left: 62mm;
+            width: 1pt;
+            height: 5mm;
+        }
+
+        /* bottom-right */
+        .cm-br-h {
+            top: 175.5mm;
+            left: 149.5mm;
+            width: 5mm;
+            height: 1pt;
+        }
+
+        .cm-br-v {
+            top: 176.5mm;
+            left: 148mm;
+            width: 1pt;
+            height: 5mm;
+        }
+
+        /* Print-side label below card */
+        .side-label {
+            position: absolute;
+            top: 180mm;
+            left: 62mm;
+            width: 86mm;
+            text-align: center;
+            font-size: 6pt;
+            color: #888888;
+            letter-spacing: 0.5pt;
+        }
 
         /* ══════════════════════════════════════
-           FRONT — full A4 page card
+           SHARED HEADER  (≈ 11 mm)
         ══════════════════════════════════════ */
-        .front {
-            position: relative;
-            width: 210mm;
-            height: 297mm;
-            overflow: hidden;
-            background-color: #FBF8F1;
+        .c-hdr {
+            background: #3849AB;
+            border-radius: 2mm 2mm 0 0;
         }
 
-        /* gold header band */
-        .f-band {
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 210mm;
-            height: 88mm;
-            background-color: #BF932E;
-            z-index: 1;
+        .c-hdr-tbl {
+            width: 100%;
+            border-collapse: collapse;
         }
 
-        /* thin darker-gold rule under the band (clean divider) */
-        .f-band-rule {
-            position: absolute;
-            top: 88mm;
-            left: 0;
-            width: 210mm;
-            height: 2mm;
-            background-color: #9C7620;
-            z-index: 1;
-        }
-
-        /* header text on the band */
-        .f-header {
-            position: absolute;
-            top: 9mm;
-            left: 0;
-            width: 210mm;
+        .c-hdr-logo-td {
+            width: 12mm;
             text-align: center;
-            z-index: 5;
+            vertical-align: middle;
+            padding: 1mm 0mm 1mm 1.5mm;
         }
 
-        .fh-logo {
-            width: 14mm;
-            height: 14mm;
-            object-fit: contain;
-            display: block;
-            margin: 0 auto 2.5mm;
+        .c-hdr-logo {
+            width: 9mm;
+            height: 15mm;
         }
 
-        .fh-name {
-            font-size: 16pt;
+        .c-hdr-title-td {
+            vertical-align: middle;
+            padding: 1mm 1mm 1mm 1.5mm;
+        }
+
+        .c-hdr-school {
+            font-size: 8pt;
             font-weight: bold;
             color: #ffffff;
             line-height: 1.15;
-            letter-spacing: 0.3pt;
         }
 
-        .fh-en {
-            font-size: 8pt;
-            color: rgba(255, 255, 255, 0.92);
-            margin-top: 2mm;
-            letter-spacing: 1.2pt;
-            text-transform: uppercase;
+        .c-hdr-sub {
+            font-size: 4.5pt;
+            color: rgba(255, 255, 255, 0.75);
+            margin-top: 0.5mm;
         }
 
-        .fh-badge {
-            display: inline-block;
-            margin-top: 4mm;
-            border: 0.8pt solid rgba(255, 255, 255, 0.7);
-            border-radius: 3mm;
-            padding: 1.6mm 8mm;
-            font-size: 8.5pt;
-            font-weight: bold;
+        .c-hdr-right-td {
+            width: 17mm;
+            text-align: center;
+            vertical-align: middle;
+            padding-right: 1.5mm;
+        }
+
+        /* Badge (front only) */
+        .c-badge {
+            border: 0.7pt solid rgba(255, 255, 255, 0.55);
+            border-radius: 1mm;
+            padding: 0.8mm 1mm;
+        }
+
+        .c-badge-lo {
+            font-size: 6pt;
             color: #ffffff;
-            letter-spacing: 0.5pt;
+            font-weight: bold;
+            line-height: 1.2;
         }
 
-        /* circular photo medallion — straddles the band edge */
-        .f-ring {
-            position: absolute;
-            top: 47mm;
-            left: 64mm;
-            width: 82mm;
-            height: 82mm;
-            border-radius: 50%;
-            background-color: #BF932E;
-            /* gold ring */
-            z-index: 10;
+        .c-badge-en {
+            font-size: 4.5pt;
+            color: rgba(255, 255, 255, 0.70);
         }
 
-        .f-ring-gap {
-            position: absolute;
-            top: 4mm;
-            left: 4mm;
-            /* 4mm gold ring */
-            width: 74mm;
-            height: 74mm;
-            border-radius: 50%;
-            background-color: #ffffff;
+        /* Watermark logo (back only) */
+        .c-logo-wm {
+            width: 9mm;
+            height: 9mm;
+            opacity: 0.25;
+        }
+
+        /* Gold stripe */
+        .c-gold {
+            height: 2pt;
+            background: #E8A020;
+        }
+
+
+        /* ══════════════════════════════════════
+           FRONT — BODY
+        ══════════════════════════════════════ */
+        .fc-body {
+            padding: 1mm 2mm 0;
+        }
+
+        .fc-body-tbl {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        /* Photo column */
+        .fc-photo-td {
+            width: 19mm;
+            vertical-align: top;
+        }
+
+        .fc-photo-frame {
+            width: 15mm;
+            height: 26mm;
+            border: 1pt solid #E8A020;
+            border-radius: 1mm;
             overflow: hidden;
+            background: #f5f0e8;
         }
 
-        .f-ring-gap img {
-            width: 74mm;
-            height: 74mm;
-            border-radius: 50%;
-            object-fit: cover;
+        .fc-photo-frame img {
+            width: 15mm;
+            height: 26mm;
+
+
+        }
+
+        .fc-photo-placeholder {
+            width: 15mm;
+            height: 26mm;
+            text-align: center;
+            padding-top: 6mm;
+            font-size: 13pt;
+        }
+
+        /* Info column */
+        .fc-info-td {
+            vertical-align: top;
+            padding-left: 1mm;
+        }
+
+        .fc-name {
+            font-size: 7.5pt;
+            font-weight: bold;
+            color: #1a1a2e;
+            line-height: 1.15;
+            padding-bottom: 0.4mm;
+            margin-bottom: 0.8mm;
+            border-bottom: 1pt solid #E8A020;
+        }
+
+        .fc-fields-tbl {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        .fc-lbl {
+            font-size: 5pt;
+            color: #999999;
+            padding: 0 1mm 0.5mm 0;
+            vertical-align: top;
+            white-space: nowrap;
+            width: 10mm;
+        }
+
+        .fc-val {
+            font-size: 6.5pt;
+            color: #111111;
+            font-weight: bold;
+            padding: 0 0 0.5mm 0;
+            vertical-align: top;
+            line-height: 1.15;
+        }
+
+        .fc-val-id {
+            color: #3849AB;
+        }
+
+
+        /* ══════════════════════════════════════
+           FRONT — FOOTER  (absolute at bottom)
+        ══════════════════════════════════════ */
+        .fc-footer {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            background: #f0f2fb;
+            border-top: 0.5pt solid #d0d4ee;
+            padding: 1mm 2mm;
+        }
+
+        .fc-ftr-tbl {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        .fc-dates-td {
+            vertical-align: middle;
+            margin-left: 30mm;
+        }
+
+        .fc-date-lbl {
+            font-size: 5pt;
+            color: #666666;
+        }
+
+        .fc-date-val {
+            font-size: 6pt;
+            color: #111111;
+            font-weight: bold;
+        }
+
+        .fc-date-row {
+            margin-bottom: 0.5mm;
+            margin-left: 5mm;
+            line-height: 2mm;
+        }
+
+        .fc-qr-td {
+            width: 13mm;
+            text-align: right;
+            vertical-align: middle;
+
+        }
+
+        .fc-qr-box {
+            border: 0.7pt solid #3849AB;
+            border-radius: 1mm;
+            padding: 0.5mm;
+            background: #ffffff;
+            margin-right: 40px;
+        }
+
+        .fc-qr-box img {
+            width: 9mm;
+            height: 9mm;
             display: block;
         }
 
-        .f-ring-gap table {
-            width: 74mm;
-            height: 74mm;
-            border-radius: 50%;
-        }
-
-        .f-ring-gap table td {
+        .fc-qr-id {
+            font-size: 3.5pt;
+            color: #3849AB;
             text-align: center;
-            vertical-align: middle;
-            font-size: 30pt;
-        }
-
-        /* section eyebrow */
-        .f-eyebrow {
-            position: absolute;
-            top: 140mm;
-            left: 0;
-            width: 210mm;
-            text-align: center;
-            z-index: 5;
-        }
-
-        .fe-tick {
-            display: inline-block;
-            width: 4mm;
-            height: 4mm;
-            background-color: #BF932E;
-            border-radius: 1mm;
-            vertical-align: middle;
-            margin-right: 3mm;
-        }
-
-        .fe-lo {
-            font-size: 11pt;
+            margin-top: 0.2mm;
             font-weight: bold;
-            color: #1F3A5F;
-            vertical-align: middle;
+            margin-right: 40px;
         }
 
-        .fe-en {
-            font-size: 7.5pt;
-            color: #9C7620;
-            letter-spacing: 1.5pt;
-            text-transform: uppercase;
-            vertical-align: middle;
-            margin-left: 3mm;
+
+        /* ══════════════════════════════════════
+           BACK — INFO GRID
+        ══════════════════════════════════════ */
+        .bc-info {
+            padding: 0.8mm 2mm 0.2mm;
         }
 
-        /* white info panel */
-        .f-panel {
-            position: absolute;
-            top: 150mm;
-            left: 24mm;
-            width: 162mm;
-            background-color: #ffffff;
-            border: 0.5pt solid #E5DCC4;
-            border-radius: 4mm;
-            padding: 4mm 6mm;
-            z-index: 5;
-        }
-
-        .fi-tbl {
+        .bc-info-tbl {
             width: 100%;
             border-collapse: collapse;
+
         }
 
-        .fi-tbl td {
-            padding: 3.8mm 2mm;
-            font-size: 10.5pt;
-            vertical-align: middle;
-            border-bottom: 0.4pt solid #EFEAD9;
+        .bc-cell {
+            width: 50%;
+            padding: 0 4mm 0.3mm 0;
+            vertical-align: top;
+
         }
 
-        .fi-tbl tr:last-child td {
-            border-bottom: none;
+        .bc-cell.r {
+            padding-left: 2mm;
+            padding-right: 0;
+            border-left: 0.5pt solid #eeeeee;
         }
 
-        .fi-zebra td {
-            background-color: #FBF7EC;
+        .bc-cell-lbl {
+            font-size: 4pt;
+            color: #aaaaaa;
+            margin-bottom: 0.1mm;
         }
 
-        .fi-lbl {
-            width: 42%;
-            color: #5B6472;
-            font-size: 10pt;
-        }
-
-        .fi-sep {
-            width: 4%;
-            color: #C9BE9E;
-            text-align: center;
-        }
-
-        .fi-val {
+        .bc-cell-val {
+            font-size: 6.5pt;
+            color: #111111;
             font-weight: bold;
-            color: #1F3A5F;
+            line-height: 1.05;
         }
 
-        /* highlighted student-id row */
-        .fi-idrow td {
-            background-color: #F0E7CC;
-        }
-
-        .fi-idrow .fi-val {
-            font-size: 12pt;
-            color: #9C7620;
-            letter-spacing: 0.6pt;
-        }
-
-        /* bottom framing bar */
-        .f-footbar {
-            position: absolute;
-            bottom: 0;
-            left: 0;
-            width: 210mm;
-            height: 11mm;
-            background-color: #BF932E;
-            text-align: center;
-            z-index: 5;
-        }
-
-        .f-footbar span {
-            display: inline-block;
-            margin-top: 3.4mm;
-            font-size: 8pt;
-            color: #ffffff;
-            letter-spacing: 0.6pt;
+        /* Thin divider */
+        .bc-div {
+            height: 0.5pt;
+            background: #dddddd;
+            margin: 0 2mm;
         }
 
         /* ══════════════════════════════════════
-           BACK — full A4 page card
+           BACK — BOTTOM  (notes + signature)
         ══════════════════════════════════════ */
-        .back {
-            position: relative;
-            width: 210mm;
-            height: 297mm;
-            overflow: hidden;
-            background-color: #FBF8F1;
+        .bc-bottom {
+            padding: 0.3mm 2mm 0.5mm;
         }
 
-        /* gold pill header */
-        .b-pill-wrap {
-            padding: 12mm 14mm 0;
-        }
-
-        .b-pill {
-            background-color: #BF932E;
-            border-radius: 6mm;
-            padding: 7mm 15mm;
-            text-align: center;
-        }
-
-        .bp-title {
-            font-size: 14pt;
-            font-weight: bold;
-            color: #ffffff;
-            letter-spacing: 0.5pt;
-        }
-
-        .bp-sub {
-            font-size: 8pt;
-            color: rgba(255, 255, 255, 0.9);
-            margin-top: 2mm;
-            letter-spacing: 1.5pt;
-            text-transform: uppercase;
-        }
-
-        .b-body {
-            padding: 9mm 18mm 0;
-        }
-
-        /* generic eyebrow on the back */
-        .b-eyebrow {
-            margin: 0 0 4mm;
-        }
-
-        .be-tick {
-            display: inline-block;
-            width: 4mm;
-            height: 4mm;
-            background-color: #BF932E;
-            border-radius: 1mm;
-            vertical-align: middle;
-            margin-right: 3mm;
-        }
-
-        .be-lo {
-            font-size: 10.5pt;
-            font-weight: bold;
-            color: #1F3A5F;
-            vertical-align: middle;
-        }
-
-        .be-en {
-            font-size: 7.5pt;
-            color: #9C7620;
-            letter-spacing: 1.5pt;
-            text-transform: uppercase;
-            vertical-align: middle;
-            margin-left: 3mm;
-        }
-
-        /* terms panel */
-        .b-terms-panel {
-            background-color: #ffffff;
-            border: 0.5pt solid #E5DCC4;
-            border-radius: 4mm;
-            padding: 5mm 6mm 2mm;
-            margin-bottom: 8mm;
-        }
-
-        .b-term-tbl {
+        .bc-bot-tbl {
             width: 100%;
             border-collapse: collapse;
-            margin-bottom: 4mm;
         }
 
-        .b-term-tbl td {
+        /* Notes */
+        .bc-notes-td {
             vertical-align: top;
-            padding: 0;
+            padding-right: 1.5mm;
         }
 
-        .b-dot-cell {
-            width: 8mm;
-            padding-top: 1mm;
-        }
-
-        .b-dot {
-            width: 4mm;
-            height: 4mm;
+        .bc-notes-box {
+            border: 0.5pt solid #d0d4ee;
             border-radius: 1mm;
-            background-color: #BF932E;
+            padding: 1mm 1.5mm;
+            background: #f8f9fd;
         }
 
-        .b-term-text {
-            font-size: 8.5pt;
-            color: #5B6472;
-            line-height: 1.65;
-        }
-
-        .b-term-bold {
+        .bc-notes-title {
+            font-size: 5.5pt;
             font-weight: bold;
-            color: #1F3A5F;
+            color: #3849AB;
+            margin-bottom: 0.5mm;
         }
 
-        /* contact rows */
-        .b-contact {
-            width: 100%;
-            border-collapse: collapse;
-            margin-bottom: 9mm;
+        .bc-notes-line {
+            font-size: 4.5pt;
+            color: #555555;
+            margin-bottom: 0.3mm;
+            line-height: 1.2;
         }
 
-        .b-contact td {
-            padding: 2.6mm 1mm;
-            font-size: 9.5pt;
-            border-bottom: 0.4pt solid #EFEAD9;
-        }
-
-        .b-contact tr:last-child td {
-            border-bottom: none;
-        }
-
-        .bc-lbl {
-            width: 24%;
-            color: #5B6472;
-        }
-
-        .bc-sep {
-            width: 5%;
-            color: #C9BE9E;
-        }
-
-        .bc-val {
-            font-weight: bold;
-            color: #1F3A5F;
-        }
-
-        /* signature */
-        .b-sig {
+        /* Signature */
+        .bc-sig-td {
+            width: 40mm;
             text-align: center;
-            padding: 2mm 0 9mm;
+            vertical-align: bottom;
         }
 
-        .b-sig-script {
-            font-size: 12pt;
-            color: #9C7620;
-            font-style: italic;
-            margin-bottom: 9mm;
-        }
-
-        .b-sig-name {
-            font-size: 11pt;
+        .bc-sig-lbl {
+            font-size: 4.5pt;
+            color: #444444;
             font-weight: bold;
-            color: #1F3A5F;
-            border-top: 0.8pt solid #9C7620;
-            display: inline-block;
-            padding-top: 3mm;
-            min-width: 72mm;
+            margin-bottom: 0.1mm;
         }
 
-        /* JOIN / EXPIRED date cards */
-        .b-dates {
-            width: 100%;
-            border-collapse: collapse;
-            margin-bottom: 10mm;
+        .bc-stamp {
+            width: 12mm;
+            height: 9mm;
         }
 
-        .b-dates .dc {
-            width: 47%;
-            vertical-align: top;
+        .bc-sig-line {
+            height: 0.1pt;
+            background: #333333;
+            width: 20mm;
+            margin: 0.1mm auto 0mm;
         }
 
-        .b-dates .dc-gap {
-            width: 6%;
+        .bc-sig-name {
+            font-size: 5pt;
+            color: #111111;
+            margin-top: -1mm;
         }
 
-        .b-date-card {
-            border: 0.6pt solid #E5DCC4;
-            border-radius: 3mm;
-            background-color: #ffffff;
-            padding: 4mm 5mm;
-            text-align: center;
+        .bc-sig-role {
+            font-size: 4pt;
+            color: #777777;
+            margin-top: 0.2mm;
         }
 
-        .bd-lbl {
-            font-size: 8pt;
-            font-weight: bold;
-            color: #9C7620;
-            letter-spacing: 1.5pt;
-            text-transform: uppercase;
-        }
-
-        .bd-val {
-            font-size: 11pt;
-            font-weight: bold;
-            color: #1F3A5F;
-            margin-top: 1.5mm;
-        }
-
-        /* footer box */
-        .b-footer-box {
-            border: 1.4pt solid #BF932E;
-            border-radius: 3mm;
-            padding: 5mm 7mm;
-        }
-
-        .b-footer-tbl {
-            width: 100%;
-            border-collapse: collapse;
-        }
-
-        .bfl-logo {
-            width: 14mm;
-            vertical-align: middle;
-            padding-right: 4mm;
-        }
-
-        .bfl-logo img {
-            width: 13mm;
-            height: 13mm;
-            object-fit: contain;
-        }
-
-        .bfl-text {
-            vertical-align: middle;
-        }
-
-        .bfl-school {
-            font-size: 9.5pt;
-            font-weight: bold;
-            color: #1F3A5F;
-        }
-
-        .bfl-tagline {
-            font-size: 7.5pt;
-            color: #5B6472;
-            margin-top: 1mm;
-            letter-spacing: 0.3pt;
-        }
-
-        .bfl-qr {
-            text-align: right;
-            vertical-align: middle;
-            width: 24mm;
-        }
-
-        .bfl-qr img {
-            width: 22mm;
-            height: 22mm;
-        }
-
-        /* back bottom framing bar */
-        .b-footbar {
+        /* ══════════════════════════════════════
+           BACK — FOOTER  (absolute at bottom)
+        ══════════════════════════════════════ */
+        .bc-footer {
             position: absolute;
             bottom: 0;
             left: 0;
-            width: 210mm;
-            height: 11mm;
-            background-color: #BF932E;
-            text-align: center;
+            width: 100%;
+            background: #3849AB;
+            padding: 1mm 2mm;
+            border-radius: 0 0 2mm 2mm;
+
         }
 
-        .b-footbar span {
-            display: inline-block;
-            margin-top: 3.4mm;
-            font-size: 8pt;
-            color: #ffffff;
-            letter-spacing: 0.6pt;
+        .bc-ftr-tbl {
+            width: 100%;
+            border-collapse: collapse;
+
+        }
+
+        .bc-contact {
+            font-size: 5.5pt;
+            color: rgba(255, 255, 255, 0.88);
+        }
+
+        .bc-disclaimer {
+            font-size: 4pt;
+            color: rgba(255, 255, 255, 0.60);
+            margin-top: 0.3mm;
         }
     </style>
 </head>
 
 <body>
 
-    {{-- ════════════════════════════════
-    PAGE 1 · FRONT
-    ════════════════════════════════ --}}
-    <div class="front">
+    {{-- ══════════════════════════════════════════
+    PAGE 1 — FRONT CARD
+    ══════════════════════════════════════════ --}}
+    <div class="page page-front">
 
-        {{-- gold band + rule --}}
-        <div class="f-band"></div>
-        <div class="f-band-rule"></div>
+        {{-- Crop / cut marks --}}
+        <div class="cm cm-tl-h"></div>
+        <div class="cm cm-tl-v"></div>
+        <div class="cm cm-tr-h"></div>
+        <div class="cm cm-tr-v"></div>
+        <div class="cm cm-bl-h"></div>
+        <div class="cm cm-bl-v"></div>
+        <div class="cm cm-br-h"></div>
+        <div class="cm cm-br-v"></div>
 
-        {{-- header text --}}
-        <div class="f-header">
-            @if($logoBase64)
-                <img class="fh-logo" src="{{ $logoBase64 }}" alt="logo" />
-            @endif
-            <span class="fh-name">{{ $schoolName }}</span><br />
-            <span class="fh-en">Buddhist Teachers College Ongtue</span><br />
-            <span class="fh-badge">ບັດນັກສຶກສາ &nbsp;|&nbsp; STUDENT CARD</span>
-        </div>
+        <div class="side-label">FRONT · ດ້ານໜ້າ</div>
 
-        {{-- circular photo medallion --}}
-        @php $isMonastic = in_array($student->gender, ['ພຣະ', 'ສ.ນ']); @endphp
-        <div class="f-ring">
-            <div class="f-ring-gap">
-                @if($photoBase64)
-                    <img src="{{ $photoBase64 }}" alt="{{ $student->full_name }}" />
-                @else
-                    <table style="background-color:{{ $isMonastic ? '#F2E8CC' : '#E7E1D2' }};">
-                        <tr>
-                            <td style="color:{{ $isMonastic ? '#9C7620' : '#5B6472' }};">
-                                {{ $isMonastic ? '☸' : '☻' }}
-                            </td>
-                        </tr>
-                    </table>
-                @endif
-            </div>
-        </div>
+        <div class="card">
 
-        {{-- section eyebrow --}}
-        <div class="f-eyebrow">
-            <span class="fe-tick"></span><span class="fe-lo">ຂໍ້ມູນນັກສຶກສາ</span><span class="fe-en">Student
-                Information</span>
-        </div>
-
-        {{-- white info panel --}}
-        <div class="f-panel">
-            <table class="fi-tbl">
-                <tr class="fi-idrow">
-                    <td class="fi-lbl">ລະຫັດນັກສຶກສາ</td>
-                    <td class="fi-sep">:</td>
-                    <td class="fi-val">{{ $student->student_id ?? '—' }}</td>
-                </tr>
-                <tr>
-                    <td class="fi-lbl">ຊື່ ແລະ ນາມສະກຸນ</td>
-                    <td class="fi-sep">:</td>
-                    <td class="fi-val">{{ $student->gendered_name }}</td>
-                </tr>
-                <tr class="fi-zebra">
-                    <td class="fi-lbl">ສາຂາວິຊາ</td>
-                    <td class="fi-sep">:</td>
-                    <td class="fi-val">{{ $student->major->name ?? '—' }}</td>
-                </tr>
-                <tr>
-                    <td class="fi-lbl">ສົກສຶກສາ</td>
-                    <td class="fi-sep">:</td>
-                    <td class="fi-val">{{ $student->academicYear->year ?? '—' }}</td>
-                </tr>
-                <tr class="fi-zebra">
-                    <td class="fi-lbl">ຊັ້ນປີ / ສະຖານະ</td>
-                    <td class="fi-sep">:</td>
-                    <td class="fi-val">ປີ {{ $student->year_level }} / {{ $student->gender }}</td>
-                </tr>
-                <tr>
-                    <td class="fi-lbl">ເບີໂທ</td>
-                    <td class="fi-sep">:</td>
-                    <td class="fi-val">{{ $student->phone ?? '—' }}</td>
-                </tr>
-            </table>
-        </div>
-
-        {{-- bottom framing bar --}}
-        <div class="f-footbar">
-            <span>{{ $schoolWebsite }} &nbsp;·&nbsp; ບັດປະຈຳຕົວນັກສຶກສາ</span>
-        </div>
-
-    </div>{{-- /front --}}
-    <div class="page-break"></div>
-
-    {{-- ════════════════════════════════
-    PAGE 2 · BACK
-    ════════════════════════════════ --}}
-    <div class="back">
-
-        {{-- gold pill header --}}
-        <div class="b-pill-wrap">
-            <div class="b-pill">
-                <div class="bp-title">ຂໍ້ກຳນົດ ແລະ ເງື່ອນໄຂ</div>
-                <div class="bp-sub">Terms and Conditions</div>
-            </div>
-        </div>
-
-        <div class="b-body">
-
-            {{-- terms panel --}}
-            <div class="b-terms-panel">
-                <table class="b-term-tbl">
+            {{-- Header --}}
+            <div class="c-hdr">
+                <table class="c-hdr-tbl">
                     <tr>
-                        <td class="b-dot-cell">
-                            <div class="b-dot"></div>
+                        <td class="c-hdr-logo-td">
+                            @if($logoBase64)
+                                <img class="c-hdr-logo" src="{{ $logoBase64 }}" alt="logo" />
+                            @endif
                         </td>
-                        <td class="b-term-text">
-                            <span class="b-term-bold">ບັດນີ້ຕ້ອງຖືຕິດໂຕ​ທຸກ​ຄັ້ງ​ທີ່​ຢູ່​ໃນ​ວິ​ທະ​ຍາ​ໄລ,</span>
-                            ຫາກ​ສູນ​ຫາຍ ຫຼື ເສຍ​ຫາຍ ຕ້ອງ​ລາຍ​ງານ​ໃຫ້​ສຳ​ນັກ​ງານ​ທະ​ບຽນ​ທັນ​ທີ.
-                            ຫ້າມ​ນຳ​ໃຊ້​ໂດຍ​ຜູ້​ທີ່​ບໍ່​ແມ່ນ​ເຈົ້າ​ຂອງ​ໂດຍ​ເດັດ​ຂາດ.
+                        <td class="c-hdr-title-td">
+                            <div class="c-hdr-school">{{ $schoolName }}</div>
+                            <div class="c-hdr-sub">Ongtue Sangha Teacher Training College</div>
+                        </td>
+                        <td class="c-hdr-right-td">
+                            <div class="c-badge">
+                                <div class="c-badge-lo">ບັດນັກສຶກສາ</div>
+                                <div class="c-badge-en">Student Card</div>
+                            </div>
                         </td>
                     </tr>
                 </table>
-                <table class="b-term-tbl">
+            </div>
+            <div class="c-gold"></div>
+
+            {{-- Body: photo + info --}}
+            <div class="fc-body">
+                <table class="fc-body-tbl">
                     <tr>
-                        <td class="b-dot-cell">
-                            <div class="b-dot"></div>
+                        <td class="fc-photo-td">
+                            <div class="fc-photo-frame">
+                                @if($photoBase64)
+                                    <img src="{{ $photoBase64 }}" alt="photo" />
+                                @else
+                                    @php $isMonastic = in_array($student->gender, ['ພຣະ', 'ສ.ນ']); @endphp
+                                    <div class="fc-photo-placeholder"
+                                        style="color:{{ $isMonastic ? '#9C7620' : '#5B6472' }};">
+                                        {{ $isMonastic ? '☸' : '☻' }}
+                                    </div>
+                                @endif
+                            </div>
                         </td>
-                        <td class="b-term-text">
-                            <span
-                                class="b-term-bold">ນັກ​ສຶກ​ສາ​ຕ້ອງ​ປະ​ຕິ​ບັດ​ຕາມ​ລະ​ບຽບ​ກົດ​ໝາຍ​ຂອງ​ວິ​ທະ​ຍາ​ໄລ,</span>
-                            ຮັກ​ສາ​ຄວາມ​ສະ​ອາດ ຄວາມ​ເປັນ​ລະ​ບຽບ​ຮຽບ​ຮ້ອຍ ແລະ ນຸ່ງ​ຖືດ້ວຍ​ຊຸດ​ທີ່​ຖືກ​ຕ້ອງ​ຕາມ​ສະ​ຖານ​ະ.
+                        <td class="fc-info-td">
+                            <div class="fc-name">{{ $student->gendered_name }}</div>
+                            <table class="fc-fields-tbl">
+                                <tr>
+                                    <td class="fc-lbl">ສາຂາ</td>
+                                    <td class="fc-val">{{ $student->major->name ?? '—' }}</td>
+                                </tr>
+                                <tr>
+                                    <td class="fc-lbl">ສົກ/ຊັ້ນ</td>
+                                    <td class="fc-val">{{ $student->academicYear->year ?? '—' }} · ປີ
+                                        {{ $student->year_level ?? '—' }}
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td class="fc-lbl">ເພດ</td>
+                                    <td class="fc-val">{{ $student->gender ?? '—' }}</td>
+                                </tr>
+                                <tr>
+                                    <td class="fc-lbl">ລະຫັດ</td>
+                                    <td class="fc-val fc-val-id">{{ $student->student_id ?? '—' }}</td>
+                                </tr>
+                            </table>
                         </td>
                     </tr>
                 </table>
             </div>
 
-            {{-- contact info --}}
-            <div class="b-eyebrow">
-                <span class="be-tick"></span><span class="be-lo">ຂໍ້ມູນຕິດຕໍ່</span><span class="be-en">Contact</span>
-            </div>
-            <table class="b-contact">
-                <tr>
-                    <td class="bc-lbl">Phone</td>
-                    <td class="bc-sep">:</td>
-                    <td class="bc-val">{{ $schoolPhone }}</td>
-                </tr>
-                <tr>
-                    <td class="bc-lbl">Email</td>
-                    <td class="bc-sep">:</td>
-                    <td class="bc-val">{{ $student->email ?? '—' }}</td>
-                </tr>
-                <tr>
-                    <td class="bc-lbl">Website</td>
-                    <td class="bc-sep">:</td>
-                    <td class="bc-val">{{ $schoolWebsite }}</td>
-                </tr>
-            </table>
-
-            {{-- signature --}}
-            <div class="b-sig">
-                <div class="b-sig-script">ລາຍເຊັນ / Signature</div>
-                <div class="b-sig-name">{{ $principalName }}</div>
-            </div>
-
-            {{-- JOIN / EXPIRED date cards --}}
-            <table class="b-dates">
-                <tr>
-                    <td class="dc">
-                        <div class="b-date-card">
-                            <div class="bd-lbl">JOIN</div>
-                            <div class="bd-val">{{ $issueDate }}</div>
-                        </div>
-                    </td>
-                    <td class="dc-gap"></td>
-                    <td class="dc">
-                        <div class="b-date-card">
-                            <div class="bd-lbl">EXPIRED</div>
-                            <div class="bd-val">{{ $expiryDate }}</div>
-                        </div>
-                    </td>
-                </tr>
-            </table>
-
-            {{-- footer box: logo + school + QR --}}
-            <div class="b-footer-box">
-                <table class="b-footer-tbl">
+            {{-- Footer: dates + QR --}}
+            <div class="fc-footer">
+                <table class="fc-ftr-tbl">
                     <tr>
-                        @if($logoBase64)
-                            <td class="bfl-logo">
-                                <img src="{{ $logoBase64 }}" alt="logo" />
-                            </td>
-                        @endif
-                        <td class="bfl-text">
-                            <div class="bfl-school">{{ $schoolName }}</div>
-                            <div class="bfl-tagline">{{ $schoolWebsite }}</div>
+                        <td class="fc-dates-td">
+                            <div class="fc-date-row">
+                                <span class="fc-date-lbl">ວັນທີ່ອອກບັດ: </span>
+                                <span class="fc-date-val">{{ $issueDate }}</span>
+                            </div>
+                            <div class="fc-date-row">
+                                <span class="fc-date-lbl">ວັນທີ່ໝົດອາຍຸ: </span>
+                                <span class="fc-date-val">{{ $expiryDate }}</span>
+                            </div>
                         </td>
                         @if($qrBase64)
-                            <td class="bfl-qr">
-                                <img src="{{ $qrBase64 }}" alt="QR" />
+                            <td class="fc-qr-td">
+                                <div class="fc-qr-box">
+                                    <img src="{{ $qrBase64 }}" alt="QR" />
+                                </div>
+                                <div class="fc-qr-id">{{ $student->student_id }}</div>
                             </td>
                         @endif
                     </tr>
                 </table>
             </div>
 
-        </div>{{-- /b-body --}}
+        </div>{{-- /card --}}
+    </div>{{-- /page 1 --}}
 
-        {{-- bottom framing bar --}}
-        <div class="b-footbar">
-            <span>{{ $schoolName }} &nbsp;·&nbsp; {{ $schoolWebsite }}</span>
-        </div>
 
-    </div>{{-- /back --}}
+    {{-- ══════════════════════════════════════════
+    PAGE 2 — BACK CARD
+    Same card position → perfect duplex alignment
+    ══════════════════════════════════════════ --}}
+    <div class="page">
+
+        {{-- Identical crop marks — align on both sides --}}
+        <div class="cm cm-tl-h"></div>
+        <div class="cm cm-tl-v"></div>
+        <div class="cm cm-tr-h"></div>
+        <div class="cm cm-tr-v"></div>
+        <div class="cm cm-bl-h"></div>
+        <div class="cm cm-bl-v"></div>
+        <div class="cm cm-br-h"></div>
+        <div class="cm cm-br-v"></div>
+
+        <div class="side-label">BACK · ດ້ານຫຼັງ</div>
+
+        <div class="card">
+
+            {{-- Header --}}
+            <div class="c-hdr">
+                <table class="c-hdr-tbl">
+                    <tr>
+                        <td class="c-hdr-logo-td">
+                            @if($logoBase64)
+                                <img class="c-hdr-logo" src="{{ $logoBase64 }}" alt="logo" />
+                            @endif
+                        </td>
+                        <td class="c-hdr-title-td">
+                            <div class="c-hdr-school">ກະຊວງສຶກສາທິການ ແລະ ກິລາ</div>
+                            <div class="c-hdr-sub">ກົມພັດທະນາຄູ ແລະ ການບໍລິຫານການສຶກສາ</div>
+                            <div class="c-hdr-sub">{{ $schoolName }}</div>
+                        </td>
+
+                    </tr>
+                </table>
+            </div>
+            <div class="c-gold"></div>
+
+            {{-- Info 2×2 grid --}}
+            <div class="bc-info">
+                <table class="bc-info-tbl">
+                    <tr>
+                        <td class="bc-cell">
+                            <div class="bc-cell-lbl">ລະຫັດນັກສຶກສາ</div>
+                            <div class="bc-cell-val">{{ $student->student_id ?? '—' }}</div>
+                        </td>
+                        <td class="bc-cell r">
+                            <div class="bc-cell-lbl">ເບີໂທ</div>
+                            <div class="bc-cell-val">{{ $student->phone ?? '—' }}</div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="bc-cell">
+                            <div class="bc-cell-lbl">ວັນ-ເດືອນ-ປີ ເກີດ</div>
+                            <div class="bc-cell-val">{{ $dobFormatted ?? '—' }}</div>
+                        </td>
+                        <td class="bc-cell r">
+                            <div class="bc-cell-lbl">ອີເມວ</div>
+                            <div class="bc-cell-val">{{ $student->email ?? '—' }}</div>
+                        </td>
+                    </tr>
+                </table>
+            </div>
+
+            <div class="bc-div"></div>
+
+            {{-- Notes + Signature --}}
+            <div class="bc-bottom">
+                <table class="bc-bot-tbl">
+                    <tr>
+                        <td class="bc-notes-td">
+                            <div class="bc-notes-box">
+                                <div class="bc-notes-title">ເງື່ອນໄຂ</div>
+                                <div class="bc-notes-line">- ໃຊ້ໄດ້ສະເພາະຜູ້ຖືທີ່ມີຊື່ ແລະ ຮູບໃນບັດ</div>
+                                <div class="bc-notes-line">- ຫ້າມດັດແປງ ຫຼື ໂອນໃຫ້ຜູ້ອື່ນ</div>
+                            </div>
+                        </td>
+                        <td class="bc-sig-td">
+                            <div class="bc-sig-lbl">ຄະນະອຳນວຍການ</div>
+                            @if($signatureBase64)
+                                <img class="bc-stamp" src="{{ $signatureBase64 }}" alt="stamp" />
+                            @else
+                                <div style="height:10mm;"></div>
+                            @endif
+
+                            <div class="bc-sig-name">{{ $principalName }}</div>
+
+                        </td>
+                    </tr>
+                </table>
+            </div>
+
+            {{-- Footer --}}
+            <div class="bc-footer">
+                <div class="bc-contact">ໂທ: {{ $schoolPhone }} | {{ $schoolWebsite }} | © {{ $schoolName }}</div>
+            </div>
+
+        </div>{{-- /card --}}
+    </div>{{-- /page 2 --}}
 
 </body>
 

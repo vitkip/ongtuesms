@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
+use Illuminate\Support\Str;
 
 class Student extends Authenticatable
 {
@@ -31,7 +32,17 @@ class Student extends Authenticatable
         'academic_year_id',
         'previous_school',
         'password',
+        'qr_token',
     ];
+
+    protected static function booted(): void
+    {
+        static::creating(function (self $student) {
+            if (empty($student->qr_token)) {
+                $student->qr_token = Str::random(48);
+            }
+        });
+    }
 
     protected $hidden = [
         'password',
